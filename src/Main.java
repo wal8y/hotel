@@ -1,6 +1,3 @@
-import org.python.core.PyObject;
-import org.python.util.PythonInterpreter;
-
 import java.io.PrintStream;
 import java.util.Iterator;
 import java.util.Map;
@@ -10,8 +7,6 @@ class ReceiptGenerator {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        PythonInterpreter py = new PythonInterpreter();
-
         //NewYork
         City newYork = new City("New York");
         newYork.addHotel("NY hotel");
@@ -36,27 +31,25 @@ class ReceiptGenerator {
 
 
         City Istanbul = new City("Istanbul");
-        Istanbul.addHotel("Kingsland");
-        Istanbul.addHotel("Zedwell");
-        //TODO : fix this homie
-        ((Hotel)Istanbul.hotels.get("Kingsland")).addRoom("Economy", 22.0);
-        ((Hotel)Istanbul.hotels.get("Kingsland")).addRoom("Business", 55.0);
-        ((Hotel)Istanbul.hotels.get("Kingsland")).addRoom("FirstClass", 80.0);
-        ((Hotel)Istanbul.hotels.get("Zedwell")).addRoom("Economy", 30.0);
-        ((Hotel)Istanbul.hotels.get("Zedwell")).addRoom("Business", 65.0);
-        ((Hotel)Istanbul.hotels.get("Zedwell")).addRoom("FirstClass", 95.0);
+        Istanbul.addHotel("Hilton Istanbul");
+        Istanbul.addHotel("Crowne Plaza");
+        ((Hotel)Istanbul.hotels.get("Hilton Istanbul")).addRoom("Economy", 70.0);
+        ((Hotel)Istanbul.hotels.get("Hilton Istanbul")).addRoom("Business", 95.0);
+        ((Hotel)Istanbul.hotels.get("Hilton Istanbul")).addRoom("FirstClass", 130.0);
+        ((Hotel)Istanbul.hotels.get("Crowne Plaza")).addRoom("Economy", 40.0);
+        ((Hotel)Istanbul.hotels.get("Crowne Plaza")).addRoom("Business", 65.0);
+        ((Hotel)Istanbul.hotels.get("Crowne Plaza")).addRoom("FirstClass", 75.0);
 
 
         City Tokyo = new City("Tokyo");
-        Tokyo.addHotel("Kingsland");
-        Tokyo.addHotel("Zedwell");
-        //TODO: nigga fix this too pls
-        ((Hotel)Tokyo.hotels.get("Kingsland")).addRoom("Economy", 22.0);
-        ((Hotel)Tokyo.hotels.get("Kingsland")).addRoom("Business", 55.0);
-        ((Hotel)Tokyo.hotels.get("Kingsland")).addRoom("FirstClass", 80.0);
-        ((Hotel)Tokyo.hotels.get("Zedwell")).addRoom("Economy", 30.0);
-        ((Hotel)Tokyo.hotels.get("Zedwell")).addRoom("Business", 65.0);
-        ((Hotel)Tokyo.hotels.get("Zedwell")).addRoom("FirstClass", 95.0);
+        Tokyo.addHotel("Asakusa");
+        Tokyo.addHotel("Komatsu Ryokan");
+        ((Hotel)Tokyo.hotels.get("Asakusa")).addRoom("Economy", 50.0);
+        ((Hotel)Tokyo.hotels.get("Asakusa")).addRoom("Business", 75.0);
+        ((Hotel)Tokyo.hotels.get("Asakusa")).addRoom("FirstClass", 110.0);
+        ((Hotel)Tokyo.hotels.get("Komatsu Ryokan")).addRoom("Economy", 30.0);
+        ((Hotel)Tokyo.hotels.get("Komatsu Ryokan")).addRoom("Business", 40.0);
+        ((Hotel)Tokyo.hotels.get("Komatsu Ryokan")).addRoom("FirstClass", 55.0);
 
         System.out.println("Choose a city:");
         System.out.println("1. New York");
@@ -65,10 +58,7 @@ class ReceiptGenerator {
         System.out.println("4. Tokyo");
 
         System.out.print("Enter the number of your choice: ");
-        py.execfile("src/gui.py");
-
-        PyObject result = py.eval("button_click()");
-        int cityChoice = Integer.parseInt(result.toString());
+        int cityChoice = scanner.nextInt();
         City chosenCity = null;
         switch (cityChoice) {
             case 1:
@@ -89,6 +79,7 @@ class ReceiptGenerator {
                 break;
             default:
                 System.out.println("Invalid choice. Defaulting to New York.");
+                System.out.println("The Temperature in New york is :"+newYork.getTemperature()+"°C");
                 chosenCity = newYork;
         }
 
@@ -103,7 +94,7 @@ class ReceiptGenerator {
         System.out.print("Enter the number of your choice: ");
         int hotelChoice = scanner.nextInt() - 1;
         Hotel chosenHotel = (Hotel)chosenCity.hotels.getOrDefault(chosenCity.hotels.keySet().toArray()[hotelChoice], (Hotel)newYork.hotels.get("Hotel A"));
-        System.out.print("How many people: ");
+        System.out.print("How many Rooms: ");
         int numberOfPeople = scanner.nextInt();
         System.out.println("Choose a room type:");
         Iterator var9 = chosenHotel.rooms.entrySet().iterator();
