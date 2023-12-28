@@ -1,9 +1,7 @@
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,8 +16,8 @@ class City {
         this.hotels = new HashMap();
     }
 
-    public void addHotel(String hotelName) {
-        this.hotels.put(hotelName, new Hotel(hotelName));
+    public void addHotel(String hotelName,Float Rating) {
+        this.hotels.put(hotelName, new Hotel(hotelName,Rating));
     }
 
     public double getTemperature() {
@@ -49,11 +47,11 @@ class City {
             } else{
                 System.out.println("Couldn't get city temperature");
                 connection.disconnect();
-                return -1.0;
+                return -200.0;
             }
         } catch (Exception e) {
             System.out.println("error getting this city temperature");
-            return -2.0;
+            return -202.0;
         }
     }
 }

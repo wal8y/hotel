@@ -9,8 +9,8 @@ class ReceiptGenerator {
         Scanner scanner = new Scanner(System.in);
         //NewYork
         City newYork = new City("New York");
-        newYork.addHotel("NY hotel");
-        newYork.addHotel("Royal hotel");
+        newYork.addHotel("NY hotel",4.3f);
+        newYork.addHotel("Royal hotel",4.6f);
         ((Hotel)newYork.hotels.get("NY hotel")).addRoom("Economy", 25.0);
         ((Hotel)newYork.hotels.get("NY hotel")).addRoom("Business", 35.0);
         ((Hotel)newYork.hotels.get("NY hotel")).addRoom("FirstClass", 50.0);
@@ -20,8 +20,8 @@ class ReceiptGenerator {
 
         //London
         City London = new City("London");
-        London.addHotel("Kingsland");
-        London.addHotel("Zedwell");
+        London.addHotel("Kingsland",4.2f);
+        London.addHotel("Zedwell",3.9f);
         ((Hotel)London.hotels.get("Kingsland")).addRoom("Economy", 22.0);
         ((Hotel)London.hotels.get("Kingsland")).addRoom("Business", 55.0);
         ((Hotel)London.hotels.get("Kingsland")).addRoom("FirstClass", 80.0);
@@ -31,8 +31,8 @@ class ReceiptGenerator {
 
 
         City Istanbul = new City("Istanbul");
-        Istanbul.addHotel("Hilton Istanbul");
-        Istanbul.addHotel("Crowne Plaza");
+        Istanbul.addHotel("Hilton Istanbul",5.0f);
+        Istanbul.addHotel("Crowne Plaza",4.5f);
         ((Hotel)Istanbul.hotels.get("Hilton Istanbul")).addRoom("Economy", 70.0);
         ((Hotel)Istanbul.hotels.get("Hilton Istanbul")).addRoom("Business", 95.0);
         ((Hotel)Istanbul.hotels.get("Hilton Istanbul")).addRoom("FirstClass", 130.0);
@@ -42,8 +42,8 @@ class ReceiptGenerator {
 
 
         City Tokyo = new City("Tokyo");
-        Tokyo.addHotel("Asakusa");
-        Tokyo.addHotel("Komatsu Ryokan");
+        Tokyo.addHotel("Asakusa",4.4f);
+        Tokyo.addHotel("Komatsu Ryokan",3.7f);
         ((Hotel)Tokyo.hotels.get("Asakusa")).addRoom("Economy", 50.0);
         ((Hotel)Tokyo.hotels.get("Asakusa")).addRoom("Business", 75.0);
         ((Hotel)Tokyo.hotels.get("Asakusa")).addRoom("FirstClass", 110.0);
@@ -63,32 +63,53 @@ class ReceiptGenerator {
         switch (cityChoice) {
             case 1:
                 chosenCity = newYork;
-                System.out.println("The Temperature in New york is :"+newYork.getTemperature()+"°C");
                 break;
             case 2:
                 chosenCity = London;
-                System.out.println("The Temperature in London is :"+London.getTemperature()+"°C");
                 break;
             case 3:
-                chosenCity = London;
-                System.out.println("The Temperature in Istanbul is :"+London.getTemperature()+"°C");
+                chosenCity = Istanbul;
                 break;
             case 4:
-                chosenCity = London;
-                System.out.println("The Temperature in Tokyo is :"+London.getTemperature()+"°C");
+                chosenCity = Tokyo;
                 break;
             default:
                 System.out.println("Invalid choice. Defaulting to New York.");
-                System.out.println("The Temperature in New york is :"+newYork.getTemperature()+"°C");
+
                 chosenCity = newYork;
+        }
+
+        System.out.print("Choose temperature unit (C/F): ");
+        char temperatureUnit = scanner.next().toUpperCase().charAt(0);
+
+        switch (temperatureUnit) {
+            case 'C':
+                System.out.println("The Temperature in " + chosenCity.name + " is: " + chosenCity.getTemperature() + "°C");
+                break;
+            case 'F':
+                double temperatureFahrenheit = (chosenCity.getTemperature() * 9/5) + 32;
+                System.out.println("The Temperature in " + chosenCity.name + " is: " + temperatureFahrenheit + "°F");
+                break;
+            default:
+                System.out.println("Invalid temperature unit. Displaying in Celsius.");
+                System.out.println("The Temperature in " + chosenCity.name + " is: " + chosenCity.getTemperature() + "°C");
         }
 
         System.out.println("Choose a hotel:");
         int hotelIndex = 1;
+        for (Iterator<Map.Entry<String, Hotel>> iterator = chosenCity.hotels.entrySet().iterator(); iterator.hasNext(); ++hotelIndex) {
+            Map.Entry<String, Hotel> entry = iterator.next();
+            String hotelName = entry.getKey();
+            Hotel hotel = entry.getValue();
+            float hotelRate = hotel.getRating();
 
-        for(Iterator var6 = chosenCity.hotels.keySet().iterator(); var6.hasNext(); ++hotelIndex) {
-            String hotelName = (String)var6.next();
-            System.out.println("" + hotelIndex + ". " + hotelName);
+            System.out.print("" + hotelIndex + ". " + hotelName + " Rating: " + hotelRate+" ");
+
+            for (int i = 1; i <= hotelRate; i++) {
+                System.out.print('*');
+            }
+
+            System.out.println();
         }
 
         System.out.print("Enter the number of your choice: ");
@@ -118,7 +139,7 @@ class ReceiptGenerator {
         scanner.close();
     }
 
-    private static void generateReceipt(Customer customer) {
+    private static void generateReceipt(Customer customer)  {
         double roomCost = (double)customer.numberOfPeople * customer.chosenRoom.pricePerPerson * (double)customer.numberOfDays;
         double breakfastCost = customer.includeBreakfast ? (double)(30 * customer.numberOfPeople * customer.numberOfDays) : 0.0;
         double totalCost = roomCost + breakfastCost;
@@ -131,5 +152,18 @@ class ReceiptGenerator {
         System.out.println("Room Cost: $" + roomCost);
         System.out.println("Breakfast Cost: $" + breakfastCost);
         System.out.println("Total Cost: $" + totalCost);
+    }
+
+    private static void displayAverageRating(City city) {
+        double totalRating = 0;
+        int hotelCount = city.hotels.size();
+
+        for (Hotel hotel : city.hotels.values()) {
+            totalRating += hotel.getRating();
+        }
+
+        double averageRating = totalRating / hotelCount;
+
+        System.out.println("Average Hotel Rating in " + city.name + ": " + averageRating);
     }
 }
