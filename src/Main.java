@@ -1,4 +1,3 @@
-import java.io.PrintStream;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Scanner;
@@ -114,7 +113,7 @@ class ReceiptGenerator {
         System.out.print("Enter the number of your choice: ");
         int hotelChoice = scanner.nextInt() - 1;
         Hotel chosenHotel = (Hotel)chosenCity.hotels.getOrDefault(chosenCity.hotels.keySet().toArray()[hotelChoice], (Hotel)newYork.hotels.get("Hotel A"));
-        System.out.print("How many Rooms: ");
+        System.out.print("How many People: ");
         int numberOfPeople = scanner.nextInt();
         System.out.println("Choose a room:");
         int roomIndex = 1;
@@ -128,7 +127,6 @@ class ReceiptGenerator {
         System.out.print("Enter the number of your choice: ");
         int roomChoice = scanner.nextInt() - 1;
 
-// Get the chosen room by index
         Room chosenRoom = chosenHotel.rooms.values().toArray(new Room[0])[roomChoice];
 
         System.out.print("Do you want breakfast? (Y/N): ");
