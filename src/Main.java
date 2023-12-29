@@ -40,7 +40,6 @@ class ReceiptGenerator {
         ((Hotel)Istanbul.hotels.get("Crowne Plaza")).addRoom("Business", 65.0);
         ((Hotel)Istanbul.hotels.get("Crowne Plaza")).addRoom("FirstClass", 75.0);
 
-
         City Tokyo = new City("Tokyo");
         Tokyo.addHotel("Asakusa",4.4f);
         Tokyo.addHotel("Komatsu Ryokan",3.7f);
@@ -117,19 +116,21 @@ class ReceiptGenerator {
         Hotel chosenHotel = (Hotel)chosenCity.hotels.getOrDefault(chosenCity.hotels.keySet().toArray()[hotelChoice], (Hotel)newYork.hotels.get("Hotel A"));
         System.out.print("How many Rooms: ");
         int numberOfPeople = scanner.nextInt();
-        System.out.println("Choose a room type:");
-        Iterator var9 = chosenHotel.rooms.entrySet().iterator();
+        System.out.println("Choose a room:");
+        int roomIndex = 1;
 
-        while(var9.hasNext()) {
-            Map.Entry<String, Room> entry = (Map.Entry)var9.next();
-            PrintStream var10000 = System.out;
-            String var10001 = (String)entry.getKey();
-            var10000.println(var10001 + ". " + ((Room)entry.getValue()).type + " (" + ((Room)entry.getValue()).pricePerPerson + " dollars each person)");
+        for (Map.Entry<String, Room> entry : chosenHotel.rooms.entrySet()) {
+            Room room = entry.getValue();
+            System.out.println(roomIndex + ". " + room.type + " (" + room.pricePerPerson + " dollars each person)");
+            roomIndex++;
         }
 
-        System.out.print("Enter your choice: ");
-        String roomTypeChoice = scanner.next().toUpperCase();
-        Room chosenRoom = (Room)chosenHotel.rooms.getOrDefault(roomTypeChoice, (Room)((Hotel)newYork.hotels.get("Hotel A")).rooms.get("Economy"));
+        System.out.print("Enter the number of your choice: ");
+        int roomChoice = scanner.nextInt() - 1;
+
+// Get the chosen room by index
+        Room chosenRoom = chosenHotel.rooms.values().toArray(new Room[0])[roomChoice];
+
         System.out.print("Do you want breakfast? (Y/N): ");
         boolean includeBreakfast = scanner.next().toUpperCase().charAt(0) == 'Y';
         System.out.print("How many days: ");
